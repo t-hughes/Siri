@@ -8,7 +8,7 @@ var getRandomMessage = function(){
 function getRando(max) {
   var min = Math.ceil(0);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 var messages = [
@@ -21,36 +21,39 @@ var messages = [
     "SPOILER ALERT:....",
     "Dumbledore Dies.",
     "Please don't bug me.",
-    "...Wha?...wha..? Sorry, was taking a nap."
+    "...Wha?...wha..? Sorry, I was taking a nap.",
+    "Not right now.",
+    "Siri can't come to the phone right now. Please leave a message after the tone. BEEEEEP.",
+    "I want to say non PG-13 things right now."
     ];
     return messages[getRando(messages.length)];
 };
 
+var headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+  'X-XSS-Protection': '1; mode=block',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Content-Security-Policy': "default-src 'self' devmountain.github.io"
+};
+
 app.get('/', function(req, res){
-  res.status(200).set({
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-    'X-XSS-Protection': '1; mode=block',
-    'X-Frame-Options': 'SAMEORIGIN',
-    'Content-Security-Policy': "default-src 'self' devmountain.github.io"
-  }).send(JSON.stringify({
+  res
+  .status(200)
+  .set(headers)
+  .send(JSON.stringify({
     message: getRandomMessage()
   }));
 });
 
 
 app.options('/', function(req, res) {
-  res.status(200).set({
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-    'X-XSS-Protection': '1; mode=block',
-    'X-Frame-Options': 'SAMEORIGIN',
-    'Content-Security-Policy': "default-src 'self' devmountain.github.io"
-  }).send();
+  res
+  .status(200)
+  .set(headers)
+  .send();
 });
 
 
